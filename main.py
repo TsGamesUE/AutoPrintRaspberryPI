@@ -11,6 +11,7 @@ import glob
 from imap_tools import MailBox, Q
 
 import json
+isascii = lambda s: len(s) == len(s.encode())
 
 with open('config.json') as config_file:
    conf = json.load(config_file)
@@ -21,14 +22,23 @@ EMAIL_ACCOUNT = conf['EMAIL_ACCOUNT']
 EMAIL_PASSWORD = conf['EMAIL_PASSWORD']
 PRINTER_NAME = conf['PRINTER_NAME']
 
+def ASCII(s):
+    x = 0
+    for i in range(len(s)):
+        x += ord(s[i])*2**(8 * (len(s) - i - 1))
+    return x
+
+
 def create_tmp_files(mailBody):
+    msg = ASCII(mailBody)
+    print(msg)
+
+    #mailBody.encode(encoding='ASCII')
+    print(msg)
     tmp = tempfile.NamedTemporaryFile()
-    path  = tempfile.gettempdir()    
-    print( os.path.abspath("test.txt"))
     try:
         tmp.write(b'mailBody')
         tmp.seek(0)
-        print(tmp.read())
         print (tmp.name)
         subprocess.run(["lp", "-d", PRINTER_NAME, os.path.abspath(tmp.name)])
     finally:
@@ -39,11 +49,15 @@ def create_tmp_files(mailBody):
          
 
 def main():
+
     with MailBox(IMAP_SERVER).login(EMAIL_ACCOUNT, EMAIL_PASSWORD, initial_folder='INBOX') as mailbox:
-        for msg in mailbox.fetch(Q('UNSEEN')):
-            print (msg.text)
+    #    for msg in mailbox.fetch(Q('UNSEEN')):
+        for msg in mailbox.fetch():
+
             mailBody = msg.text
+            print(isascii(mailBody))
             create_tmp_files(mailBody)
+
 
 
     
