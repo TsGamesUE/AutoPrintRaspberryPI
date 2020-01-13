@@ -3,10 +3,10 @@
 
 import sys
 import imaplib
-
-IMAP_SERVER = 'imap.gmail.com'
-EMAIL_ACCOUNT = "notatallawhistleblowerIswear@gmail.com"
-EMAIL_PASSWORD = 'secread Passwords'
+from imap_tools import MailBox, Q
+IMAP_SERVER = '....kasserver.com'
+EMAIL_ACCOUNT = ""
+EMAIL_PASSWORD = ''
 
 def connect(IMAP_SERVER, EMAIL_ACCOUNT, EMAIL_PASSWORD):
     imap = imaplib.IMAP4_SSL(IMAP_SERVER)
@@ -17,8 +17,10 @@ def disconnect(imap):
     imap.logout()
 
 def main():
-   imap = connect(IMAP_SERVER, EMAIL_ACCOUNT, EMAIL_PASSWORD) 
-
+    with MailBox(IMAP_SERVER).login(EMAIL_ACCOUNT, EMAIL_PASSWORD, initial_folder='INBOX') as mailbox:
+        subjects = [msg.subject for msg in mailbox.fetch(Q('UNSEEN'))]
+        print (subjects)
+    
 
 if __name__ == "__main__":
     main()
