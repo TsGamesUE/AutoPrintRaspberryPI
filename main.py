@@ -3,23 +3,43 @@
 
 import sys
 import imaplib
+import os
+import tempfile
+import subprocess
+import glob
+
 from imap_tools import MailBox, Q
-IMAP_SERVER = '....kasserver.com'
+IMAP_SERVER = ''
 EMAIL_ACCOUNT = ""
 EMAIL_PASSWORD = ''
+PRINTER_NAME = ''
 
-def connect(IMAP_SERVER, EMAIL_ACCOUNT, EMAIL_PASSWORD):
-    imap = imaplib.IMAP4_SSL(IMAP_SERVER)
-    imap.login(EMAIL_ACCOUNT,EMAIL_PASSWORD)
-    return imap
+def create_tmp_files(mailBody):
+    tmp = tempfile.NamedTemporaryFile()
+    path  = tempfile.gettempdir()    
+    try:
+        tmp.write(b'mailBody')
+        tmp.seek(0)
 
-def disconnect(imap):
-    imap.logout()
+
+        subprocess.run(["lp", "-d", PRINTER_NAME, tmp.name])
+    finally:
+        print('the_end')
+        tmp.close()
+
+
+
+         
 
 def main():
     with MailBox(IMAP_SERVER).login(EMAIL_ACCOUNT, EMAIL_PASSWORD, initial_folder='INBOX') as mailbox:
-        subjects = [msg.subject for msg in mailbox.fetch(Q('UNSEEN'))]
-        print (subjects)
+        for msg in mailbox.fetch(Q('UNSEEN')):
+            print (msg.text)
+            mailBody = msg.text
+            create_tmp_files(mailBody)
+
+
+   # create_tmp_files('test')
     
 
 if __name__ == "__main__":
