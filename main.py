@@ -32,12 +32,12 @@ def ASCII(s):
 def create_tmp_files(mailBody):
     msg = ASCII(mailBody)
     print(msg)
-
+    msg = mailBody
     #mailBody.encode(encoding='ASCII')
     print(msg)
     tmp = tempfile.NamedTemporaryFile()
     try:
-        tmp.write(msg)
+        tmp.write(msg.encode('ascii','ignore'))
         tmp.seek(0)
         print (tmp.name)
         subprocess.run(["lp", "-d", PRINTER_NAME, os.path.abspath(tmp.name)])
