@@ -37,7 +37,7 @@ def create_tmp_files(mailBody):
     print(msg)
     tmp = tempfile.NamedTemporaryFile()
     try:
-        tmp.write(b'mailBody')
+        tmp.write(msg)
         tmp.seek(0)
         print (tmp.name)
         subprocess.run(["lp", "-d", PRINTER_NAME, os.path.abspath(tmp.name)])
