@@ -9,22 +9,29 @@ import subprocess
 import glob
 
 from imap_tools import MailBox, Q
-IMAP_SERVER = ''
-EMAIL_ACCOUNT = ""
-EMAIL_PASSWORD = ''
-PRINTER_NAME = ''
+
+import json
+
+with open('config.json') as config_file:
+   conf = json.load(config_file)
+
+
+IMAP_SERVER = conf['IMAP_SERVER']
+EMAIL_ACCOUNT = conf['EMAIL_ACCOUNT']
+EMAIL_PASSWORD = conf['EMAIL_PASSWORD']
+PRINTER_NAME = conf['PRINTER_NAME']
 
 def create_tmp_files(mailBody):
     tmp = tempfile.NamedTemporaryFile()
     path  = tempfile.gettempdir()    
+    print( os.path.abspath("test.txt"))
     try:
         tmp.write(b'mailBody')
         tmp.seek(0)
-
-
-        subprocess.run(["lp", "-d", PRINTER_NAME, tmp.name])
+        print(tmp.read())
+        print (tmp.name)
+        subprocess.run(["lp", "-d", PRINTER_NAME, os.path.abspath(tmp.name)])
     finally:
-        print('the_end')
         tmp.close()
 
 
@@ -39,7 +46,7 @@ def main():
             create_tmp_files(mailBody)
 
 
-   # create_tmp_files('test')
+    
     
 
 if __name__ == "__main__":
