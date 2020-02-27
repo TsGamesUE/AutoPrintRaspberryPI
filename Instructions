@@ -1,0 +1,31 @@
+homeCups installieren
+
+sudo apt-get update
+sudo apt-get install libcups2-dev libcupsimage2-dev git build-essential cups system-config-printer
+
+Treiber Installieren
+
+git clone https://github.com/adafruit/zj-58
+cd zj-58
+make
+sudo ./install
+
+Danach anleitung von Adafruit folgen: https://learn.adafruit.com/networked-thermal-printer-using-cups-and-raspberry-pi/connect-and-configure-printer
+
+dann einen ordner unter home/pi erstellen AutoPrintRaspberryPI und da die dateien main.py,config.json etc. reinzeihen
+
+dann im Terminal mit cd /home/pi/AutoPrintRaspberryPI ins Verzeichnis wechseln und den befehl chmod +x mainmail.sh ausführen
+
+danach einfach mal versuchen ob er druckt mit python3.7 main.py
+
+aber vorher halt die Zugangsdaten in der config.json festlegen
+
+sollte alles funktionieren crontab -e eingeben und dann nano auswählen
+
+die textzeilen kannst du löschen wenn das dokument komplett leer ist bitte eingeben:
+
+*/1 * * * * cd /home/pi/AutoPrintRaspberryPI && /usr/bin/sh mainmail.sh
+@reboot cd /home/pi/AutoPrintRaspberryPI && /usr/bin/sh mainmail.sh
+
+dann str + o | enter | strg + x drücken
+
