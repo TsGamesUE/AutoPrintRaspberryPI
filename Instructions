@@ -10,6 +10,8 @@ cd zj-58
 make
 sudo ./install
 
+Nach installation von Python3.6 bitte | pip3 install imap_tools | ausführen
+
 Danach anleitung von Adafruit folgen: https://learn.adafruit.com/networked-thermal-printer-using-cups-and-raspberry-pi/connect-and-configure-printer
 
 dann einen ordner unter home/pi erstellen AutoPrintRaspberryPI und da die dateien main.py,config.json etc. reinzeihen
