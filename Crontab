@@ -1,0 +1,2 @@
+*/1 * * * * cd /home/pi/AutoPrintRaspberryPI && sh mainmail.sh
+@reboot cd /home/pi/AutoPrintRaspberryPI && sh mainmail.sh
