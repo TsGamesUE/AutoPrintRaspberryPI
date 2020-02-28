@@ -51,8 +51,8 @@ def create_tmp_files(mailBody):
 def main():
 
     with MailBox(IMAP_SERVER).login(EMAIL_ACCOUNT, EMAIL_PASSWORD, initial_folder='INBOX') as mailbox:
-    #    for msg in mailbox.fetch(Q('UNSEEN')):
-        for msg in mailbox.fetch():
+        for msg in mailbox.fetch(Q('UNSEEN')):
+       # for msg in mailbox.fetch():
 
             mailBody = msg.text
             print(isascii(mailBody))
